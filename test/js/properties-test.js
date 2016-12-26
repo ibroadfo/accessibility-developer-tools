@@ -119,6 +119,18 @@ test('Link with aria-hidden text', function() {
     equal(result, 'Close this window');
 });
 
+test('div with hidden content', function() {
+  var fixture = document.getElementById('qunit-fixture');
+  var div = fixture.appendChild(document.createElement('div'));
+  div.innerHTML = 'foo <span style="display:none">this should not be visible</span> bar baz';
+  var textAlternatives = {};
+  var result = axs.properties.findTextAlternatives(div, textAlternatives);
+  equal(Object.keys(textAlternatives).length, 1, 'exactly one text alternative');
+  equal('content' in textAlternatives, true, 'content in textAlternatives');
+  equal(textAlternatives.content.text, 'foo bar baz');
+  equal(result, 'foo bar baz');
+});
+
 test('Link with aria-labelledby aria-hidden text', function() {
     var fixture = document.getElementById('qunit-fixture');
     var anchor = fixture.appendChild(document.createElement('a'));
